@@ -1,0 +1,96 @@
+set nocompatible            " Use Vim defaults (much better!)
+syntax on
+filetype on
+
+
+"===== PLUGIN MANAGEMENT ====="
+
+"git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set runtimepath+=~/.vim/bundle/Vundle.vim
+let path='~/.vim/bundle'
+call vundle#begin()
+    Plugin 'gmarik/Vundle.vim'
+    Plugin 'tpope/vim-fugitive'
+    Plugin 'scrooloose/nerdtree'
+call vundle#end()            " required
+filetype plugin indent on    " required
+
+
+
+"===== GENERAL SETTINGS ====="
+
+set number                  " Show line numbers`
+set mouse=a                 " Enable mouse
+set nobackup writebackup
+set history=20
+set viminfo=                " Turn off history
+set statusline=
+set statusline+=%<%f[%{&ff}]%y%r%m
+set statusline+=%=
+set statusline+=\ char:[%b\ 0x%B]
+set statusline+=\ pos:[%l,%c%V]
+set statusline+=\ view:[%P]
+
+set laststatus=2            " always a status line
+set fileformats=unix,dos
+set colorcolumn=81
+set backspace=2             " backspace over everything in insert mode
+set hlsearch                " highlight all searches
+
+
+"===== INDENTATION ====="
+
+" Default Tab/Indent settings
+set autoindent
+set expandtab
+set ts=4 sw=4
+
+
+"===== FILETYPE SETTINGS ====="
+
+" FileType specific settings
+au BufRead,BufNewfile Makefile setlocal filetype=Makefile
+au BufRead,BufNewfile *.md setlocal filetype=markdown
+au BufRead,BufNewFile *.ftl setlocal filetype=html
+"au BufRead,BufNewfile *.cpp,*.java set foldmethod=syntax
+au Filetype Makefile setlocal ts=4 sw=4 noexpandtab
+au Filetype cpp,c,cs setlocal ts=2 sw=2 expandtab
+au Filetype javascript setlocal ts=2 sw=2 expandtab
+au Filetype html setlocal ts=2 sw=2 expandtab nowrap
+au Filetype markdown setlocal ts=2 sw=2 expandtab textwidth=80
+au Filetype text setlocal ts=2 sw=2 expandtab textwidth=80
+au Filetype fstab setlocal ts=8 sw=8 sws=8 noexpandtab
+
+:let g:html_indent_inctags = "html,body,head,tbody"
+:autocmd BufRead,BufNewFile ~/code/hw/ecs193/staff-scheduler/* setlocal ts=4 sw=4 noexpandtab
+
+"===== SHORTCUTS ====="
+
+set pastetoggle=<F9>
+map <C-p> :tabprev<CR>
+map <C-n> :tabnext<CR>
+nmap <C-a> ggvG$
+vmap <C-c> "+y
+map <C-v> "+p
+
+
+"===== HIGHLIGHT ====="
+
+highlight ExtraWhitespace ctermbg=blue guibg=blue
+match ExtraWhitespace /\s\+/
+autocmd BufWinEnter * match ExtraWhitespace /\s\+/
+autocmd InsertEnter * match ExtraWhitespace /\s\+/
+autocmd InsertLeave * match ExtraWhitespace /\s\+/
+autocmd BufWinLeave * call clearmatches()
+
+highlight Tabs ctermbg=red guibg=red
+match Tabs /\t/
+autocmd BufWinEnter * match Tabs /\t/
+autocmd InsertEnter * match Tabs /\t/
+autocmd InsertLeave * match Tabs /\t/
+autocmd BufWinLeave * call clearmatches()
+

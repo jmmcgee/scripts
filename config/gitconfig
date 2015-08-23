@@ -1,0 +1,14 @@
+[user]
+	name = Joseph McGee
+	email = jmmcgee.00@gmail.com
+[alias]
+	co = checkout
+	ci = commit
+	br = branch
+	st = status
+	purge = "!git reset --hard; git clean -xfd"
+	graph = log --graph --oneline --all --decorate
+[push]
+	default = matching
+[core]
+	editor = vim

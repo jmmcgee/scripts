@@ -1,0 +1,18 @@
+#!/bin/bash
+
+
+#------------------------------------------------------------------------------#
+#--- Functions ----------------------------------------------------------------#
+#------------------------------------------------------------------------------#
+
+# Output the current path, one folder per line
+function path {
+    echo $PATH | sed s/:/\\n/g
+}
+
+# Remove color control codes from stdin
+function nocolor {
+    sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"
+}
+
+umask 002

@@ -1,0 +1,74 @@
+#!/bin/bash
+
+
+function make_backup
+{
+    echo $@
+
+    # SOURCE is file/directory to backup
+    #SOURCE=$1
+    name=$(basename $SOURCE)
+
+    # DESTINATION is directory where files are placed
+    #DESTINATION=${2%/}
+    backup="$DESTINATION/$name.`ts`"
+
+    # Discover newest backup
+    oldBackups=( `ls -d "$DESTINATION/$name."????-??-??_??-??-??` )
+    [[ ! "$oldBackups" == "" ]] && lastBackup=${oldBackups[${#oldBackups[@]}-1]}
+
+    echo "SOURCE: $SOURCE"
+    echo "DESTINATION: $DESTINATION"
+    echo "OLD BACKUPS:"
+    for x in ${oldBackups[*]}; do printf '  %s\n' "$x"; done
+    echo "LAST BACKUP: $lastBackup"
+    echo "NEW BACKUP: $backup"
+    #echo
+    #echo "OLD BACKUPS:"
+    #for x in ${oldBackups[*]} ; do printf '  %s\n' "$x"; done
+
+    echo
+    if [[ -e "$lastBackup" ]]; then
+        echo cp --reflink=always -r "$lastBackup" "$backup"
+        cp --reflink=always -a -r "$lastBackup" "$backup"
+    fi
+
+    echo rsync -a -H --delete --super -h -v "$SOURCE" "$backup"
+    rsync -a -H --delete --super -h -v "$SOURCE" "$backup"
+}
+
+LOGFILE=/dev/null
+EXCLUDEFILE=
+SOURCE=""
+DESTINATION=""
+
+while [[ $# > 0 ]]; do 
+    key="$1"
+    case $key in
+        -v|--verbose)
+            exec >&1
+            ;;
+        -s|--silent)
+            exec >/dev/null
+            ;;
+        *)
+            if [[ $SOURCE == "" ]]; then
+                SOURCE=$1
+                [[ -e "$SOURCE/.excludes" ]] && EXCLUDEFILE="$SOURCE/.excludes"
+            elif [[ $DESTINATION == "" ]]; then
+                DESTINATION=$1
+            else
+                printf 'invalid parameter: %s' $1 >&2
+            fi
+            ;;
+    esac
+    shift
+done
+
+if [[ $SOURCE == "" || $DESTINATION == "" ]]; then
+    echo 'Usage: backup [OPTION]... SOURCE DESTINATION'
+    exit
+fi
+
+make_backup $SOURCE $DESTINATION
+
