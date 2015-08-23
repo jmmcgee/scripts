@@ -1,10 +1,7 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 # -*- coding: utf-8 -*-
 #
-# Orignal Author: Helge Jensen <hej@actua.dk>
-# Source: https://btrfs.wiki.kernel.org/images-btrfs/8/81/Snapbtr.txt
-#
-# Modified by: Joseph McGee
+# Author: Helge Jensen <hej@actua.dk>
 """
 snapbtr is a small utility that keeps snapshots of btrfs filesystems.
 
@@ -54,7 +51,7 @@ exploit security-bugs or tamper with the content.
 
 import re, math, time, os, os.path, sys, shutil, stat, statvfs
 
-DATE_FORMAT = '%Y%m%d-%H%M%S' # date format used for directories to clean
+DATE_FORMAT = '%Y-%m-%d_%H:%M:%S_%Z' # date format used for directories to clean
 DEFAULT_KEEP_BACKUPS = 2
 
 # find TIME_SCALE: t < 2**32 => e**(t/c) < 2**32
@@ -158,7 +155,7 @@ class Operations:
                 os.path.join(self.path, self.datestamp())]
         self.check_call(args)
     def datestamp(self):
-        return time.strftime(DATE_FORMAT, time.gmtime(None))
+        return time.strftime(DATE_FORMAT, time.localtime(None))
     def trace(self, *args, **kwargs):
         f = self.tracef
         if f:

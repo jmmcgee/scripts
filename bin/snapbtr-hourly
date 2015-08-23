@@ -1,0 +1,2 @@
+#!/bin/sh
+TZ='Etc/UTC' /usr/local/bin/snapbtr --snap /home --path /home/.snapshots --target-backups 100 --verbose
