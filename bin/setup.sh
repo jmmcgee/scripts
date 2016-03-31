@@ -2,10 +2,13 @@
 
 [ -z HOME ] && HOME=/home/$USER
 
-#wget https://raw.githubusercontent.com/jmmcgee/scripts/master/config/bashrc -O $HOME/.bashrc
-wget https://raw.githubusercontent.com/jmmcgee/scripts/master/config/gitconfig -O $HOME/.gitconfig
-wget https://raw.githubusercontent.com/jmmcgee/scripts/master/config/vimrc -O $HOME/.vimrc
+cd $HOME
+git clone https://github.com/jmmcgee/scripts
 
-# set up vim
-git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+cp -i scripts/config/bashrc $HOME/.bashrc
+cp -i scripts/config/gitconfig $HOME/.gitconfig
+cp -i scripts/config/vimrc $HOME/.vimrc
+
+rm -rf $HOME/.vim/bundle/Vundle.vim
+git clone https://github.com/gmarik/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim
 
