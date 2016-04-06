@@ -1,6 +1,7 @@
 #!/bin/bash
 
 [ -z HOME ] && HOME=/home/$USER
+[[ "$1" == -s ]] && SILENT="-f" || SILENT="-i"
 
 cd $HOME
 printf "Cloning scripts... \n"
@@ -8,22 +9,22 @@ rm -rf .scripts
 git clone https://github.com/jmmcgee/scripts .scripts
 
 printf "\nConfiguring bash... \n"
-cp -i .scripts/config/bashrc $HOME/.bashrc
+cp $SILENT .scripts/config/bashrc $HOME/.bashrc
 
 printf "\nConfiguring ssh... \n"
 mkdir -p $HOME/.ssh
 chmod 700 $HOME/.ssh
-cp -i .scripts/config/ssh_config $HOME/.ssh/config
-cp -i .scripts/config/ssh_authorized_keys $HOME/.ssh/authorized_keys
+cp $SILENT .scripts/config/ssh_config $HOME/.ssh/config
+cp $SILENT .scripts/config/ssh_authorized_keys $HOME/.ssh/authorized_keys
 
 printf "\nConfiguring git... \n"
-cp -i .scripts/config/gitconfig $HOME/.gitconfig
+cp $SILENT .scripts/config/gitconfig $HOME/.gitconfig
 
 printf "\nConfiguring vim... \n"
-cp -i .scripts/config/vimrc $HOME/.vimrc
+cp $SILENT .scripts/config/vimrc $HOME/.vimrc
 rm -rf $HOME/.vim/bundle/Vundle.vim
 git clone https://github.com/gmarik/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim
 
 printf "\nCopying bin... \n"
-cp -ri .scripts/bin $HOME
+cp -r $SILENT .scripts/bin $HOME
 
