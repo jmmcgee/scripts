@@ -10,6 +10,12 @@ git clone https://github.com/jmmcgee/scripts .scripts
 printf "\nConfiguring bash... \n"
 cp -i .scripts/config/bashrc $HOME/.bashrc
 
+printf "\nConfiguring ssh... \n"
+mkdir -p $HOME/.ssh
+chmod 700 $HOME/.ssh
+cp -i .scripts/config/ssh_config $HOME/.ssh/config
+cp -i .scripts/config/ssh_authorized_keys $HOME/.ssh/authorized_keys
+
 printf "\nConfiguring git... \n"
 cp -i .scripts/config/gitconfig $HOME/.gitconfig
 
