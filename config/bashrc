@@ -1,10 +1,24 @@
 #!/bin/bash
 
 # If not running interactively, don't do anything
-case $- in
-    *i*) ;;
-      *) return;;
-esac
+[[ $- != *i* ]] && return
+alias ls='ls --color=auto'
+
+########
+### Path (set path first)
+
+if [ -d ~/bin ]; then
+    export PATH=~/bin:$PATH
+fi
+
+# Output the current path, one folder per line
+function path {
+    echo $PATH | sed s/:/\\n/g
+}
+
+
+########
+### Misc. sh/bash settings
 
 if [ -d ~/bin ]; then
     export PATH=~/bin:$PATH
@@ -17,23 +31,6 @@ HISTSIZE=1000
 HISTFILESIZE=2000
 PS1="[\u@\h \W]\$ "
 
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
-
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-fi
-
-# some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
-
 # enable programmable completion features
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
@@ -43,20 +40,58 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# Output the current path, one folder per line
-function path {
-    echo $PATH | sed s/:/\\n/g
-}
+# colors
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+[ -x /usr/bin/dircolors ] && eval "$(dircolors -b)"
+alias ls='ls --color=auto'
+#alias dir='dir --color=auto'
+#alias vdir='vdir --color=auto'
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
 
 # Remove color control codes from stdin
 function nocolor {
     sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"
 }
 
+# Defaults
+BROWSER=/usr/bin/chromium
+EDITOR=/usr/bin/vim
+
+# set umask to be permissive
 umask 002
 
-export RTE_SDK=
-export RTE_TARGET=x86_64-native-linuxapp-gcc
 
-export RTE_PCI="-w 00:09.0 -w 00:0a.0"
-export RTE_EAL="-l 0,1 -n 2 -m 256"
+########
+### DPDK related settings
+
+# the directory containing dpdk src repo/release
+#   example: "~/dpdk"
+export RTE_SDK="~/dpdk"
+# default target architecture+toolchain
+#   example: "x86_64-native-linuxapp-gcc"
+export RTE_TARGET="x86_64-native-linuxapp-gcc"
+# options for whitelisted (or blacklisted) network PCIs
+#   example: "-w 00:09.0 -w 00:0a.0"
+RTE_PCI="-w 00:09.0 -w 00:0a.0"
+# options for default eal configuration
+#   example: "-l 0,1 -n 2 -m 256"
+RTE_EAL="-l 0,1 -n 2 -m 256"
+
+# number of hugepages that should be set up
+#  example: 512
+PAGE_NUM=512
+# hugepage size in kB
+#  example: 2048
+PAGE_SIZE=2048
+NUMA_NODE=0
+
+# setup hugepages
+function sethuge {
+    echo $PAGE_NUM | sudo tee /sys/devices/system/node/node$NUMA_NODE/hugepages/hugepages-"$PAGE_SIZE"kB/nr_hugepages
+    HTLB_MOUNTED=$( mount | grep "type hugetlbfs" | wc -l)
+    if [ $HTLB_MOUNTED -eq 0 ]; then
+        sudo mount -t hugetlbfs hugetlb /mnt/huge
+    fi
+}

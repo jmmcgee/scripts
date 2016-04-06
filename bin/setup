@@ -1,0 +1,23 @@
+#!/bin/bash
+
+[ -z HOME ] && HOME=/home/$USER
+
+cd $HOME
+printf "Cloning scripts... \n"
+rm -rf .scripts
+git clone https://github.com/jmmcgee/scripts .scripts
+
+printf "\nConfiguring bash... \n"
+cp -i .scripts/config/bashrc $HOME/.bashrc
+
+printf "\nConfiguring git... \n"
+cp -i .scripts/config/gitconfig $HOME/.gitconfig
+
+printf "\nConfiguring vim... \n"
+cp -i .scripts/config/vimrc $HOME/.vimrc
+rm -rf $HOME/.vim/bundle/Vundle.vim
+git clone https://github.com/gmarik/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim
+
+printf "\nCopying bin... \n"
+cp -ri .scripts/bin $HOME
+
