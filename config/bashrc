@@ -89,9 +89,14 @@ NUMA_NODE=0
 
 # setup hugepages
 function sethuge {
+    [ ! -z $1 ] && PAGE_NUM=$1
     echo $PAGE_NUM | sudo tee /sys/devices/system/node/node$NUMA_NODE/hugepages/hugepages-"$PAGE_SIZE"kB/nr_hugepages
     HTLB_MOUNTED=$( mount | grep "type hugetlbfs" | wc -l)
     if [ $HTLB_MOUNTED -eq 0 ]; then
         sudo mount -t hugetlbfs hugetlb /mnt/huge
     fi
+}
+
+function cathuge {
+    cat /proc/meminfo | grep -i huge
 }
