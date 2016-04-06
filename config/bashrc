@@ -6,6 +6,10 @@ case $- in
       *) return;;
 esac
 
+if [ -d ~/bin ]; then
+    export PATH=~/bin:$PATH
+fi
+
 shopt -s histappend
 shopt -s checkwinsize
 HISTCONTROL=ignoreboth
