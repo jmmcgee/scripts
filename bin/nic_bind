@@ -1,0 +1,2 @@
+#!/bin/bash
+$RTE_SDK/tools/dpdk_nic_bind.py $*
