@@ -25,6 +25,10 @@ cp $SILENT .scripts/config/vimrc $HOME/.vimrc
 rm -rf $HOME/.vim/bundle/Vundle.vim
 git clone https://github.com/gmarik/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim
 
+printf "\nCompiling source... \n"
+cd .scripts/src && make
+cd $HOME
+
 printf "\nCopying bin... \n"
 cp -r $SILENT .scripts/bin $HOME
 
