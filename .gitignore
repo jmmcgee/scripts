@@ -1,1 +1,4 @@
 *.sw[o-z]
+
+bin/explain_error
+src/explain_error/explain_error
