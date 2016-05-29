@@ -20,7 +20,6 @@ call vundle#end()            " required
 filetype plugin indent on    " required
 
 
-
 "===== GENERAL SETTINGS ====="
 
 set number                  " Show line numbers`
@@ -40,14 +39,28 @@ set fileformats=unix,dos
 set colorcolumn=81
 set backspace=2             " backspace over everything in insert mode
 set hlsearch                " highlight all searches
+set tags=./tags;$HOME
 
 
 "===== INDENTATION ====="
 
 " Default Tab/Indent settings
 set autoindent
-set expandtab
+set noexpandtab
 set ts=4 sw=4
+
+
+"===== CLIPBOARD ====="
+set clipboard=unnamedplus,unnamed
+set pastetoggle=<F9>
+nmap <C-a> ggvG$
+map <C-c> "+y
+map <C-v> "+p
+
+
+"===== TABS ====="
+map <C-p> :tabprev<CR>
+map <C-n> :tabnext<CR>
 
 
 "===== FILETYPE SETTINGS ====="
@@ -67,15 +80,6 @@ au Filetype fstab setlocal ts=8 sw=8 sws=8 noexpandtab
 
 :let g:html_indent_inctags = "html,body,head,tbody"
 :autocmd BufRead,BufNewFile ~/code/hw/ecs193/staff-scheduler/* setlocal ts=4 sw=4 noexpandtab
-
-"===== SHORTCUTS ====="
-
-set pastetoggle=<F9>
-map <C-p> :tabprev<CR>
-map <C-n> :tabnext<CR>
-nmap <C-a> ggvG$
-vmap <C-c> "+y
-map <C-v> "+p
 
 
 "===== HIGHLIGHT ====="
