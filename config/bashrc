@@ -148,8 +148,8 @@ function make_bench
 
 function run_bench
 {
-    cd $PM2_BENCH
-    padico-launch -n 2 ./mpi_bench_base
+	cd $PM2_BENCH
+	padico-launch -n 2 ./mpi_bench_base
 }
 
 # run bench for pm2,openmpi
