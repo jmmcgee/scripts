@@ -1,28 +1,29 @@
 #!/bin/bash
+#
+# ~/.bashrc
+#
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
-alias ls='ls --color=auto'
+umask 077
 
 ########
 ### Path (set path first)
 
 if [ -d ~/bin ]; then
-    export PATH=~/bin:$PATH
+	export PATH=$(echo ${PATH} | sed -e "s|$HOME/bin:||g" )
+	export PATH=~/bin:$PATH
 fi
 
 # Output the current path, one folder per line
-function path {
-    echo $PATH | sed s/:/\\n/g
+function path
+{
+	echo $PATH | sed s/:/\\n/g
 }
 
 
 ########
 ### Misc. sh/bash settings
-
-if [ -d ~/bin ]; then
-    export PATH=~/bin:$PATH
-fi
 
 shopt -s histappend
 shopt -s checkwinsize
@@ -33,11 +34,11 @@ PS1="[\u@\h \W]\$ "
 
 # enable programmable completion features
 if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
+	if [ -f /usr/share/bash-completion/bash_completion ]; then
+		. /usr/share/bash-completion/bash_completion
+	elif [ -f /etc/bash_completion ]; then
+		. /etc/bash_completion
+	fi
 fi
 
 # colors
@@ -49,10 +50,13 @@ alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
+alias less='less -R'
+alias vim='vim -X'
 
 # Remove color control codes from stdin
-function nocolor {
-    sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"
+function nocolor
+{
+	sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"
 }
 
 # Defaults
@@ -68,35 +72,87 @@ umask 002
 
 # the directory containing dpdk src repo/release
 #   example: "~/dpdk"
-export RTE_SDK="~/dpdk"
+export RTE_SDK="$HOME/code/dpdk"
 # default target architecture+toolchain
 #   example: "x86_64-native-linuxapp-gcc"
 export RTE_TARGET="x86_64-native-linuxapp-gcc"
 # options for whitelisted (or blacklisted) network PCIs
 #   example: "-w 00:09.0 -w 00:0a.0"
-RTE_PCI="-w 00:09.0 -w 00:0a.0"
+RTE_PCI="-w 82:00.0"
 # options for default eal configuration
 #   example: "-l 0,1 -n 2 -m 256"
-RTE_EAL="-l 0,1 -n 2 -m 256"
+RTE_EAL="-l 0,1 -n 2 -m 512"
 
 # number of hugepages that should be set up
 #  example: 512
-PAGE_NUM=512
+PAGE_NUM=2048
 # hugepage size in kB
 #  example: 2048
 PAGE_SIZE=2048
 NUMA_NODE=0
 
 # setup hugepages
-function sethuge {
-    [ ! -z $1 ] && PAGE_NUM=$1
-    echo $PAGE_NUM | sudo tee /sys/devices/system/node/node$NUMA_NODE/hugepages/hugepages-"$PAGE_SIZE"kB/nr_hugepages
-    HTLB_MOUNTED=$( mount | grep "type hugetlbfs" | wc -l)
-    if [ $HTLB_MOUNTED -eq 0 ]; then
-        sudo mount -t hugetlbfs hugetlb /mnt/huge
-    fi
+function sethuge
+{
+	[ ! -z $1 ] && PAGE_NUM=$1
+	echo $PAGE_NUM | sudo tee /sys/devices/system/node/node$NUMA_NODE/hugepages/hugepages-"$PAGE_SIZE"kB/nr_hugepages
+	HTLB_MOUNTED=$( mount | grep "type hugetlbfs" | wc -l)
+	if [ $HTLB_MOUNTED -eq 0 ]; then
+		sudo mount -t hugetlbfs hugetlb /mnt/huge
+	fi
 }
 
-function cathuge {
-    cat /proc/meminfo | grep -i huge
+function cathuge
+{
+	cat /proc/meminfo | grep -i huge
 }
+
+
+export PM2=$HOME/projects/pm2
+export PM2_ROOT=$PM2/pm2-2015-02-11
+export PM2_BENCH=$PM2/mpibenchmark-0.2
+#export NMAD_DRIVER=
+#export LD_BIND_NOW=y
+
+function make_pm2
+{
+	rm -rf /opt/pm2/*
+	cd $PM2_ROOT/scripts
+	if [ -f "$1" ]; then
+		conf=$1
+	else
+		conf=./example-nmad+pioman+pthread.conf
+	fi
+	./pm2-build-packages ${conf} --prefix=/opt/pm2
+}
+function set_pm2
+{
+	unset_pm2
+	export PATH=/opt/pm2/bin:${PATH}
+	export LD_LIBRARY_PATH=/opt/pm2/lib:${LD_LIBRARY_PATH}
+	export PKG_CONFIG_PATH=/opt/pm2/lib/pkgconfig:${PKG_CONFIG_PATH}
+}
+
+function unset_pm2
+{
+	export PATH=$(echo ${PATH} | sed -e 's|/opt/pm2/bin:||g')
+	export LD_LIBRARY_PATH=$(echo ${LD_LIBRARY_PATH} | sed -e 's|/opt/pm2/lib:||g')
+	export PKG_CONFIG_PATH=$(echo $PKG_CONFIG_PATH | sed -e 's|/opt/pm2/lib/pkgconfig:||g')
+}
+
+function make_bench
+{
+	cd $PM2_BENCH
+	make clean; autogen.sh; ./configure; make -j4
+}
+
+function run_bench
+{
+    cd $PM2_BENCH
+    padico-launch -n 2 ./mpi_bench_base
+}
+
+# run bench for pm2,openmpi
+# padico-launch -net ib -hosts 10.1.1.1,10.2.2.2 -n 2 ./mpi_bench_base
+
+set_pm2
