@@ -12,14 +12,14 @@ alias ts='date +%Y-%m-%d_%H-%M-%S'
 ### Path (set path first)
 
 if [ -d ~/bin ]; then
-	export PATH=$(echo ${PATH} | sed -e "s|$HOME/bin:||g" )
+	export PATH=$(echo ${PATH} | gsed -e "s|$HOME/bin:||g" )
 	export PATH=~/bin:$PATH
 fi
 
 # Output the current path, one folder per line
 function path
 {
-	echo $PATH | sed s/:/\\n/g
+	echo $PATH | gsed s/:/\\n/g
 }
 
 
@@ -57,7 +57,7 @@ alias vim='vim -X'
 # Remove color control codes from stdin
 function nocolor
 {
-	sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"
+	gsed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"
 }
 
 # Defaults
