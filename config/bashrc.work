@@ -68,3 +68,4 @@ export EDITOR=/usr/bin/vim
 umask 002
 
 export BOOST_ROOT=/Users/jmcgee/projects/boost/boost_1_64_0
+export JOURNAL_DIR="/Users/jmcgee/Google Drive/SimulationProject/journal"

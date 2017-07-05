@@ -1,0 +1,21 @@
+#!/bin/bash
+
+
+keyword=journal
+[[ ! -z $1 ]] && keyword=$1
+
+if [[ ! -d "$JOURNAL_DIR" ]]; then
+	journal_dir="/Users/jmcgee/Google Drive/SimulationProject/journal"
+elif [[ ! -d "$journal_dir" ]]; then
+	journal_dir=$pwd
+fi
+
+entry="$(date +%Y-%m-%d.$keyword.txt)"
+file="${journal_dir}/${entry}"
+ts=$(date +"%Y-%m-%d %H:%M:%S %Z")
+
+touch "$file"
+printf "\n[%s] - %s\n" "$ts" "$keyword" >> "$file"
+vim + "$file"
+
+
