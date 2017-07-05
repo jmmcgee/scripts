@@ -1,0 +1,70 @@
+#!/bin/bash
+#
+# ~/.bashrc
+#
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+umask 077
+alias ts='date +%Y-%m-%d_%H-%M-%S'
+
+########
+### Path (set path first)
+
+if [ -d ~/bin ]; then
+	export PATH=$(echo ${PATH} | sed -e "s|$HOME/bin:||g" )
+	export PATH=~/bin:$PATH
+fi
+
+# Output the current path, one folder per line
+function path
+{
+	echo $PATH | sed s/:/\\n/g
+}
+
+
+########
+### Misc. sh/bash settings
+
+shopt -s histappend
+shopt -s checkwinsize
+HISTCONTROL=ignoreboth
+HISTSIZE=1000
+HISTFILESIZE=2000
+PS1="[\u@\h \W]\$ "
+
+# enable programmable completion features
+if ! shopt -oq posix; then
+	if [ -f /usr/share/bash-completion/bash_completion ]; then
+		. /usr/share/bash-completion/bash_completion
+	elif [ -f /etc/bash_completion ]; then
+		. /etc/bash_completion
+	fi
+fi
+
+# colors
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+[ -x /usr/bin/dircolors ] && eval "$(dircolors -b)"
+#alias ls='ls --color=auto'
+#alias dir='dir --color=auto'
+#alias vdir='vdir --color=auto'
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+alias less='less -R'
+alias vim='vim -X'
+
+# Remove color control codes from stdin
+function nocolor
+{
+	sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"
+}
+
+# Defaults
+#BROWSER=/usr/bin/chromium
+export EDITOR=/usr/bin/vim
+
+# set umask to be permissive
+umask 002
+
+export BOOST_ROOT=/Users/jmcgee/projects/boost/boost_1_64_0
