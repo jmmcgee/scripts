@@ -1,0 +1,7 @@
+#!/bin/bash
+
+cd "$rippled"
+tmux new-session -d -c "$rippled" -s rippled \
+	&& tmux new-window -d -c "$rippled" -n rippled -t 1 \
+	&& tmux new-window -d -c "$rippled/src" -n src -t 2 \
+	&& tmux new-window -d -c "$rippled/build" -n build -t 3 \

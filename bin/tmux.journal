@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd "$JOURNAL_DIR"
+tmux new-session -d -c "$JOURNAL_DIR" -s journal \
+	&& tmux new-window -d -c "$JOURNAL_DIR" -n overview -t 1 'vim .' \
+	&& tmux new-window -d -c "$JOURNAL_DIR" -n journal -t 2 \

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+cd "$scratch"
+tmux new-session -d -c "$scratch" -s scratch \
+	&& tmux new-window -d -c "$scratch" -n scratch -t 1 \
+	&& tmux new-window -d -c "$scratch/src" -n src -t 2 \
+	&& tmux new-window -d -c "$scratch/build" -n build -t 3 \

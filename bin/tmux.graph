@@ -1,0 +1,7 @@
+#!/bin/bash
+
+cd "$graph"
+tmux new-session -d -c "$graph" -s graph \
+	&& tmux new-window -d -c "$graph" -n graph -t 1 \
+	&& tmux new-window -d -c "$graph/src" -n src -t 2 \
+	&& tmux new-window -d -c "$graph/build" -n build -t 3 \

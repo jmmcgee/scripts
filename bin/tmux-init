@@ -1,0 +1,5 @@
+#!/bin/bash
+
+for tmux_init_file in $(ls "$HOME/bin/tmux."*); do
+	. "$tmux_init_file"
+done

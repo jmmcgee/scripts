@@ -1,0 +1,9 @@
+#!/bin/bash
+
+date=$1
+[[ -z "$date" ]] && date=$(date +%Y-%m-%d) || shift
+
+# commit to current git repo daily to close out changes for the day
+git add --all
+git commit -m "daily commit. closing journal for $date" $@
+

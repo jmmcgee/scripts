@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd "$HOME"
+tmux new-session -d -c "$HOME" -s server 'ssh consensus-simulation.ripple.com'
