@@ -8,6 +8,12 @@
 umask 077
 alias ts='date +%Y-%m-%d_%H-%M-%S'
 
+### if on MAC OS X
+if [[ $(uname) = Darwin ]]; then
+	alias sed='gsed'
+	alias sort='gsort'
+fi
+
 ########
 ### Path (set path first)
 
@@ -15,7 +21,7 @@ function add_to_path
 {
 	for p in $@; do
 		if [ -d "$p" ]; then
-			export PATH=$(echo ${PATH} | gsed -e "s|"$p":||g" )
+			export PATH=$(echo ${PATH} | sed -e "s|"$p":||g" )
 			export PATH="$p":$PATH
 		fi
 	done
@@ -24,7 +30,7 @@ function add_to_path
 # Output the current path, one folder per line
 function path
 {
-	echo $PATH | gsed s/:/\\n/g
+	echo $PATH | sed s/:/\\n/g
 }
 
 add_to_path "$HOME/bin"
@@ -65,7 +71,7 @@ alias vim='vim -X'
 # Remove color control codes from stdin
 function nocolor
 {
-	gsed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"
+	sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"
 }
 
 # Defaults
@@ -76,5 +82,10 @@ export BROWSER EDITOR
 # set umask to be permissive
 umask 002
 
+export BOOST_ROOT=$HOME/projects/boost/boost_1_64_0
+export rippled=$HOME/projects/ripple/rippled
+export boost=$HOME/projects/boost/boost_1_64_0
+
+add_to_path "$BOOST_ROOT" "/usr/local/bin"
 tmux-init
 
