@@ -5,7 +5,7 @@
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
-umask 077
+#umask 077
 alias ts='date +%Y-%m-%d_%H-%M-%S'
 
 ### if on MAC OS X
@@ -75,17 +75,7 @@ function nocolor
 }
 
 # Defaults
-BROWSER=/usr/bin/chromium
+#BROWSER=/usr/bin/chromium
 EDITOR=/usr/bin/vim
 export BROWSER EDITOR
-
-# set umask to be permissive
-umask 002
-
-export BOOST_ROOT=$HOME/projects/boost/boost_1_64_0
-export rippled=$HOME/projects/ripple/rippled
-export boost=$HOME/projects/boost/boost_1_64_0
-
-add_to_path "$BOOST_ROOT" "/usr/local/bin"
-tmux-init
 
