@@ -2,12 +2,10 @@
 
 
 keyword=journal
-[[ ! -z $1 ]] && keyword=$1
+[[ ! -z "$1" ]] && keyword="$1"
 
 if [[ ! -d "$JOURNAL_DIR" ]]; then
-	journal_dir="/Users/jmcgee/Google Drive/SimulationProject/journal"
-elif [[ ! -d "$journal_dir" ]]; then
-	journal_dir=$pwd
+    journal_dir="$HOME/Documents/personal/journal"
 fi
 
 entry="$(date +%Y-%m-%d.$keyword.txt)"
