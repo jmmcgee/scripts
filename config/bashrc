@@ -5,13 +5,13 @@
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
-#umask 077
+umask 022
 alias ts='date +%Y-%m-%d_%H-%M-%S'
 
 ### if on MAC OS X
 if [[ $(uname) = Darwin ]]; then
-	alias sed='gsed'
-	alias sort='gsort'
+    alias sed='gsed'
+    alias sort='gsort'
 fi
 
 ########
@@ -19,18 +19,18 @@ fi
 
 function add_to_path
 {
-	for p in $@; do
-		if [ -d "$p" ]; then
-			export PATH=$(echo ${PATH} | sed -e "s|"$p":||g" )
-			export PATH="$p":$PATH
-		fi
-	done
+    for p in $@; do
+        if [ -d "$p" ]; then
+            export PATH=$(echo ${PATH} | sed -e "s|"$p":||g" )
+            export PATH="$p":$PATH
+        fi
+    done
 }
 
 # Output the current path, one folder per line
 function path
 {
-	echo $PATH | sed s/:/\\n/g
+    echo $PATH | sed s/:/\\n/g
 }
 
 add_to_path "$HOME/bin"
@@ -49,11 +49,11 @@ PS1="[\u@\h \w]\$ "
 
 # enable programmable completion features
 if ! shopt -oq posix; then
-	if [ -f /usr/share/bash-completion/bash_completion ]; then
-		. /usr/share/bash-completion/bash_completion
-	elif [ -f /etc/bash_completion ]; then
-		. /etc/bash_completion
-	fi
+    if [ -f /usr/share/bash-completion/bash_completion ]; then
+        . /usr/share/bash-completion/bash_completion
+    elif [ -f /etc/bash_completion ]; then
+        . /etc/bash_completion
+    fi
 fi
 
 # colors
@@ -71,11 +71,11 @@ alias vim='vim -X'
 # Remove color control codes from stdin
 function nocolor
 {
-	sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"
+    sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"
 }
 
 # Defaults
-#BROWSER=/usr/bin/chromium
 EDITOR=/usr/bin/vim
-export BROWSER EDITOR
+LC_COLLATE=C
+export EDITOR LC_COLLATE
 

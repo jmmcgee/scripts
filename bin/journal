@@ -5,11 +5,11 @@ keyword=journal
 [[ ! -z "$1" ]] && keyword="$1"
 
 if [[ ! -d "$JOURNAL_DIR" ]]; then
-    journal_dir="$HOME/Documents/personal/journal"
+    JOURNAL_DIR="$HOME/Documents/personal/journal"
 fi
 
 entry="$(date +%Y-%m-%d.$keyword.txt)"
-file="${journal_dir}/${entry}"
+file="${JOURNAL_DIR}/${entry}"
 ts=$(date +"%Y-%m-%d %H:%M:%S %Z")
 
 touch "$file"

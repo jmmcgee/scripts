@@ -79,6 +79,7 @@ au Filetype text setlocal ts=2 sw=2 expandtab textwidth=80
 au Filetype fstab setlocal ts=8 sw=8 sws=8 noexpandtab
 au Filetype tex setlocal ts=4 sw=4 noexpandtab
 au Filetype python setlocal ts=4 sw=4 expandtab
+au Filetype sh setlocal ts=4 sw=4 expandtab
 
 :let g:html_indent_inctags = "html,body,head,tbody"
 
