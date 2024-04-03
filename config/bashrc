@@ -66,7 +66,7 @@ alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 alias less='less -R'
-alias vim='vim -X'
+#alias vim='vim -X'
 
 # Remove color control codes from stdin
 function nocolor
@@ -76,6 +76,8 @@ function nocolor
 
 # Defaults
 EDITOR=/usr/bin/vim
-LC_COLLATE=C
+#LC_COLLATE=C
 export EDITOR LC_COLLATE
 
+export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+gpgconf --launch gpg-agent
