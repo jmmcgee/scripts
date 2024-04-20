@@ -1,6 +1,7 @@
 [user]
 	name = Joseph McGee
 	email = jmmcgee.00@gmail.com
+	signingkey = 5A9D70C2BB0F0939!
 [alias]
 	co = checkout
 	ci = commit
@@ -12,3 +13,5 @@
 	default = matching
 [core]
 	editor = vim
+[commit]
+	gpgsign = true
